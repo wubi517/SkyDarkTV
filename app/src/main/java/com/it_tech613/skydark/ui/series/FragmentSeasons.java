@@ -287,7 +287,7 @@ public class FragmentSeasons extends MyFragment{
     private List<SeasonModel> startGetSeries(){
         try {
             String requestBody = MyApp.instance.getIptvclient().getSeriesInfo(MyApp.user,MyApp.pass,MyApp.selectedSeriesModel.getSeries_id());
-            Log.e(getClass().getSimpleName(),requestBody);
+            Log.e(getClass().getSimpleName(),MyApp.selectedSeriesModel.getSeries_id());
             JSONObject jsonObject = new JSONObject(requestBody);
             Gson gson=new Gson();
             try {
@@ -298,11 +298,26 @@ public class FragmentSeasons extends MyFragment{
 //                MyApp.selectedSeriesModel.setBackdrop_path(seriesModel.getBackdrop_path());
                 if (seasonModels.size()>0){
                     try {
-                        JSONObject episodes=jsonObject.getJSONObject("episodes");
+                        boolean is_array = false;
+                        JSONObject episodes = new JSONObject();
+                        JSONArray i_episodes = new JSONArray();
+                        JSONArray episodeArray = new JSONArray();
+                        try {
+                            episodes=jsonObject.getJSONObject("episodes");
+                        }catch (Exception e){
+                            is_array = true;
+                            episodeArray = jsonObject.getJSONArray("episodes");
+                        }
+
                         Log.e(TAG,episodes.toString());
                         for (SeasonModel seasonModel:seasonModels){
                             try {
-                                JSONArray i_episodes=episodes.getJSONArray(String.valueOf(seasonModel.getSeason_number()));
+                                if(is_array){
+                                    i_episodes=episodeArray.getJSONArray(seasonModel.getSeason_number());
+                                }else {
+                                    i_episodes=episodes.getJSONArray(String.valueOf(seasonModel.getSeason_number()));
+                                }
+
                                 List<EpisodeModel> episodeModels=new ArrayList<>();
                                 for (int i=0;i<i_episodes.length();i++){
                                     try {
@@ -326,7 +341,7 @@ public class FragmentSeasons extends MyFragment{
                                 Log.e(TAG,"There is no episodes in " + seasonModel.getSeason_number());
                             }
                         }
-                    }catch (JSONException e) {
+                    }catch (Exception e) {
                         e.printStackTrace();
                     }
                 }else {

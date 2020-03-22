@@ -539,18 +539,18 @@ public class FragmentIjkLiveTv extends MyFragment implements View.OnClickListene
             selectedChannel.setIs_favorite(false);
             boolean is_exist = false;
             int pp = 0;
-            for (int i = 0; i < MyApp.fullModels.get(1).getChannels().size(); i++) {
-                if (MyApp.fullModels.get(1).getChannels().get(i).getName().equals(selectedChannel.getName())) {
+            for (int i = 0; i < MyApp.fullModels.get(2).getChannels().size(); i++) {
+                if (MyApp.fullModels.get(2).getChannels().get(i).getName().equals(selectedChannel.getName())) {
                     is_exist = true;
                     pp = i;
                 }
             }
             if (is_exist) {
-                MyApp.fullModels.get(1).getChannels().remove(pp);
+                MyApp.fullModels.get(2).getChannels().remove(pp);
             }
             //get favorite channel names list
             List<String> fav_channel_names=new ArrayList<>();
-            for (EPGChannel epgChannel: MyApp.fullModels.get(1).getChannels()){
+            for (EPGChannel epgChannel: MyApp.fullModels.get(2).getChannels()){
                 fav_channel_names.add(epgChannel.getName());
             }
             //set
@@ -562,14 +562,14 @@ public class FragmentIjkLiveTv extends MyFragment implements View.OnClickListene
             MyApp.fullModels.get(1).getChannels().add(selectedChannel);
             //get favorite channel names list
             List<String> fav_channel_names=new ArrayList<>();
-            for (EPGChannel epgChannel: MyApp.fullModels.get(1).getChannels()){
+            for (EPGChannel epgChannel: MyApp.fullModels.get(2).getChannels()){
                 fav_channel_names.add(epgChannel.getName());
             }
             //set
             MyApp.instance.getPreference().put(Constants.getFAV_LIVE_CHANNELS(), fav_channel_names);
             Log.e("LIVE_RATIO","added");
         }
-        if (categoryPos==1) categoryAdapter.notifyDataSetChanged();
+        if (categoryPos==2) categoryAdapter.notifyDataSetChanged();
         setAddFavText();
     }
 

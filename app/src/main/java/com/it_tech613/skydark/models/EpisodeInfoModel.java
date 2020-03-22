@@ -5,20 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class EpisodeInfoModel {
     @Expose
-    @SerializedName("bitrate")
-    private int bitrate;
-    @Expose
     @SerializedName("duration")
     private String duration;
-    @Expose
-    @SerializedName("duration_secs")
-    private int duration_secs;
     @Expose
     @SerializedName("name")
     private String name;
     @Expose
     @SerializedName("rating")
-    private float rating;
+    private String  rating = "";
     @Expose
     @SerializedName("releasedate")
     private String releasedate;
@@ -29,24 +23,22 @@ public class EpisodeInfoModel {
     @SerializedName("movie_image")
     private String movie_image;
 
-    public int getBitrate() {
-        return bitrate;
-    }
-
     public String getDuration() {
         return duration;
     }
 
-    public int getDuration_secs() {
-        return duration_secs;
-    }
 
     public String getName() {
         return name;
     }
 
-    public float getRating() {
-        return rating;
+    public float  getRating() {
+        if(rating==null || rating.isEmpty()){
+            return 0;
+        }else {
+            return Float.parseFloat(rating);
+        }
+
     }
 
     public String getReleasedate() {

@@ -101,8 +101,8 @@ public class LoginActivity extends AppCompatActivity  implements View.OnClickLis
             new Thread(this::callLogin).start();
         }
         if (BuildConfig.DEBUG){
-            name_txt.setText("shakmain");
-            pass_txt.setText("BKgYW4tzmv");
+            name_txt.setText("famz");
+            pass_txt.setText("kZBHWzb8");
         }
 
         TextView mac_txt = findViewById(R.id.login_mac_address);
@@ -292,7 +292,7 @@ public class LoginActivity extends AppCompatActivity  implements View.OnClickLis
             MyApp.live_categories = categories;
             for (CategoryModel categoryModel: categories){
                 String category_name = categoryModel.getName().toLowerCase();
-                if(category_name.contains("adult")||category_name.contains("xxx")){
+                if(category_name.contains("adult")||category_name.contains("xxx") || category_name.contains("porn")){
                     Constants.xxx_category_id = categoryModel.getId();
                     Log.e("LoginActivity","xxx_category_id: "+ Constants.xxx_category_id);
                 }
@@ -374,6 +374,11 @@ public class LoginActivity extends AppCompatActivity  implements View.OnClickLis
             List<EPGChannel> epgChannels=new ArrayList<>();
             try{
                 epgChannels = new ArrayList<>(gson.fromJson(liveStreams, new TypeToken<List<EPGChannel>>() {}.getType()));
+                for (EPGChannel epgChannel:epgChannels){
+                    if (epgChannel.getCategory_id()!=-1 && epgChannel.getCategory_id()==Constants.xxx_category_id)
+                        epgChannel.setIs_locked(true);
+                    else epgChannel.setIs_locked(false);
+                }
             }catch (Exception e){
                 JSONArray response;
                 try {
@@ -656,7 +661,6 @@ public class LoginActivity extends AppCompatActivity  implements View.OnClickLis
 
     private List<EPGChannel> getFavoriteChannels(List<EPGChannel> epgChannels){
         List<EPGChannel> favChannels=new ArrayList<>();
-
         if(MyApp.instance.getPreference().get(Constants.getFAV_LIVE_CHANNELS())!=null){
             List<String> fav_channel_names=(List<String>) MyApp.instance.getPreference().get(Constants.getFAV_LIVE_CHANNELS());
             for(int j=0;j< fav_channel_names.size();j++){
@@ -664,8 +668,7 @@ public class LoginActivity extends AppCompatActivity  implements View.OnClickLis
                     if(epgChannels.get(i).getName().equals(fav_channel_names.get(j))){
                         epgChannels.get(i).setIs_favorite(true);
                         favChannels.add(epgChannels.get(i));
-                    }else {
-                        epgChannels.get(i).setIs_favorite(false);
+                        break;
                     }
                 }
             }
